@@ -59,7 +59,7 @@ const closeLoginModal = () => {
         <!-- KIRI: Logo YWKA -->
         <div class="flex-shrink-0 flex items-center">
           <NuxtLink to="/" class="text-2xl font-extrabold text-blue-800 tracking-tight flex items-center">
-            <img src="../../../assets/logo-ywka.png" alt="Logo YWKA" class="h-8 md:h-10 w-auto" />
+            <img src="/logo-ywka.png" alt="Logo YWKA" class="h-8 md:h-10 w-auto" />
           </NuxtLink>
         </div>
 
@@ -285,7 +285,7 @@ const closeLoginModal = () => {
             <div class="flex items-center gap-2">
               <div class="flex-shrink-0 flex items-center">
                 <NuxtLink to="/" class="text-2xl font-extrabold text-blue-800 tracking-tight flex items-center">
-                  <img src="../../../assets/logo-ywka.png" alt="Logo YWKA" class="h-8 md:h-10 w-auto" />
+                  <img src="/logo-ywka.png" alt="Logo YWKA" class="h-8 md:h-10 w-auto" />
                 </NuxtLink>
               </div>
               <span class=" text-amber-400 font-extrabold text-base tracking-wide">
