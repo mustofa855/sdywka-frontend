@@ -24,10 +24,8 @@
     </div>
 
     <main v-else class="max-w-xl md:max-w-2xl mx-auto p-4 md:p-6 space-y-4">
-      
       <!-- Kartu Profil Utama -->
       <section class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-100 flex flex-col items-center text-center relative">
-        <!-- Avatar & Tombol Ubah Kamera -->
         <div class="relative mb-3">
           <img 
             :src="user.foto || defaultAvatar" 
@@ -36,7 +34,7 @@
           />
           <button 
             @click="isConfirmAvatarModalOpen = true"
-            class="absolute bottom-0 right-0 bg-blue-600 text-white p-2.5 rounded-full shadow-md hover:bg-blue-700 transition active:scale-95"
+            class="absolute bottom-0 right-0 bg-blue-600 text-white p-2.5 rounded-full shadow-md hover:bg-blue-700 transition active:scale-95 cursor-pointer"
             title="Ganti Foto Profil"
           >
             <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -72,7 +70,7 @@
             </div>
             <button 
               @click="isConfirmUsernameModalOpen = true"
-              class="text-xs font-bold text-blue-600 hover:text-blue-700 bg-blue-50 px-3 py-1.5 rounded-lg transition"
+              class="text-xs font-bold text-blue-600 hover:text-blue-700 bg-blue-50 px-3 py-1.5 rounded-lg transition cursor-pointer"
             >
               Ubah Username
             </button>
@@ -86,7 +84,7 @@
             </div>
             <button 
               @click="isConfirmQuotesModalOpen = true"
-              class="text-xs font-bold text-blue-600 hover:text-blue-700 bg-blue-50 px-3 py-1.5 rounded-lg transition shrink-0"
+              class="text-xs font-bold text-blue-600 hover:text-blue-700 bg-blue-50 px-3 py-1.5 rounded-lg transition shrink-0 cursor-pointer"
             >
               Ubah Quotes
             </button>
@@ -100,7 +98,7 @@
             </div>
             <button 
               @click="isConfirmPasswordModalOpen = true"
-              class="text-xs font-bold text-blue-600 hover:text-blue-700 bg-blue-50 px-3 py-1.5 rounded-lg transition"
+              class="text-xs font-bold text-blue-600 hover:text-blue-700 bg-blue-50 px-3 py-1.5 rounded-lg transition cursor-pointer"
             >
               Ubah Password
             </button>
@@ -129,11 +127,35 @@
           </div>
         </div>
       </section>
-
     </main>
 
+    <!-- MODAL: Notifikasi (Pengganti Alert) -->
+    <div v-if="noticeModal.isOpen" class="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm animate-fade-in">
+      <div class="bg-white rounded-2xl max-w-sm w-full p-5 shadow-xl space-y-4 text-center">
+        <div 
+          :class="noticeModal.isError ? 'bg-rose-100 text-rose-600' : 'bg-emerald-100 text-emerald-600'" 
+          class="w-12 h-12 rounded-full flex items-center justify-center mx-auto"
+        >
+          <svg v-if="noticeModal.isError" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+          </svg>
+          <svg v-else class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+          </svg>
+        </div>
+        <h3 class="text-base font-bold text-slate-800">{{ noticeModal.title }}</h3>
+        <p class="text-xs text-slate-600 leading-relaxed">{{ noticeModal.message }}</p>
+        <button 
+          @click="noticeModal.isOpen = false" 
+          class="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition cursor-pointer"
+        >
+          Mengerti
+        </button>
+      </div>
+    </div>
+
     <!-- MODAL: Konfirmasi Logout -->
-    <div v-if="isConfirmLogoutModalOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm animate-fade-in">
+    <div v-if="isConfirmLogoutModalOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
       <div class="bg-white rounded-2xl max-w-sm w-full p-5 shadow-xl space-y-4 text-center">
         <div class="w-12 h-12 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center mx-auto">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -145,10 +167,7 @@
         <div class="flex gap-3 pt-2">
           <button @click="isConfirmLogoutModalOpen = false" class="flex-1 py-2.5 rounded-xl border border-slate-200 text-slate-600 text-xs font-bold hover:bg-slate-50 transition cursor-pointer">Batal</button>
           <button @click="handleLogout" :disabled="isLoggingOut" class="flex-1 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-sm cursor-pointer disabled:opacity-50">
-            <svg v-if="isLoggingOut" class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
-              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </svg>
+            <span v-if="isLoggingOut">Proses...</span>
             <span v-else>Keluar</span>
           </button>
         </div>
@@ -274,14 +293,11 @@
 import { ref, reactive, onMounted } from 'vue'
 import QrcodeVue from 'qrcode.vue'
 
-definePageMeta({ 
-  layout: 'user'
-})
+definePageMeta({ layout: 'user' })
 
 const config = useRuntimeConfig()
 const API_BASE = config.public.apiBase
 
-// Cookie Auth (Disamakan dengan login/index.vue)
 const authToken = useCookie('auth_token')
 const refreshToken = useCookie('refresh_token')
 const authUser = useCookie('auth_user')
@@ -305,7 +321,22 @@ const user = reactive({
 
 const fileInputRef = ref(null)
 
-// Modal States
+// Modal Alert Custom
+const noticeModal = reactive({
+  isOpen: false,
+  title: '',
+  message: '',
+  isError: false
+})
+
+const showNotice = (title, message, isError = false) => {
+  noticeModal.title = title
+  noticeModal.message = message
+  noticeModal.isError = isError
+  noticeModal.isOpen = true
+}
+
+// Modal Form States
 const isConfirmLogoutModalOpen = ref(false)
 const isConfirmAvatarModalOpen = ref(false)
 const isConfirmUsernameModalOpen = ref(false)
@@ -323,11 +354,10 @@ const passwordForm = reactive({
   confirmPassword: ''
 })
 
-// --- AMBIL DATA PROFIL DARI BACKEND ---
+// --- 1. AMBIL DATA PROFIL ---
 const fetchUserProfile = async () => {
   isLoadingProfile.value = true
 
-  // 1. Ambil data awal langsung dari cookie auth_user jika tersedia
   if (authUser.value) {
     try {
       const parsedUser = typeof authUser.value === 'string' ? JSON.parse(authUser.value) : authUser.value
@@ -341,18 +371,12 @@ const fetchUserProfile = async () => {
     }
   }
 
-  // 2. Jika tidak ada token login, balikkan ke login
-  if (!authToken.value) {
-    return navigateTo('/login')
-  }
+  if (!authToken.value) return navigateTo('/login')
 
-  // 3. Ambil data terbaru dari backend
   try {
     const data = await $fetch(`${API_BASE}/api/auth/me/`, {
       method: 'GET',
-      headers: {
-        Authorization: `Bearer ${authToken.value}`
-      }
+      headers: { Authorization: `Bearer ${authToken.value}` }
     })
 
     user.nama = data.nama || 'Pengguna'
@@ -363,8 +387,6 @@ const fetchUserProfile = async () => {
     user.uuid_short = data.uuid_short || String(data.id).padStart(6, '0')
   } catch (err) {
     console.error('Gagal mengambil profil:', err)
-    
-    // Tangkap status code 401 dengan tepat
     const statusCode = err.statusCode || err.response?.status || err.status
     if (statusCode === 401) {
       authToken.value = null
@@ -388,9 +410,7 @@ const handleLogout = async () => {
     if (refreshToken.value) {
       await $fetch(`${API_BASE}/api/auth/logout/`, {
         method: 'POST',
-        headers: {
-          Authorization: `Bearer ${authToken.value}`
-        },
+        headers: { Authorization: `Bearer ${authToken.value}` },
         body: { refresh: refreshToken.value }
       })
     }
@@ -425,9 +445,11 @@ const handleAvatarSelected = async (event) => {
       headers: { Authorization: `Bearer ${authToken.value}` },
       body: formData
     })
-    user.foto = data.foto
+    
+    user.foto = data.foto || data.foto_profil || user.foto
+    showNotice('Berhasil', 'Foto profil berhasil diperbarui!', false)
   } catch (err) {
-    alert('Gagal mengunggah foto profil.')
+    showNotice('Gagal', err.data?.message || 'Gagal mengunggah foto profil. Pastikan ukuran foto tidak terlalu besar.', true)
   }
 }
 
@@ -452,6 +474,7 @@ const handleUsernameChange = async () => {
     })
     user.username = data.username
     isUsernameFormModalOpen.value = false
+    showNotice('Berhasil', 'Username berhasil diperbarui!', false)
   } catch (err) {
     formError.value = err.data?.message || 'Gagal memperbarui username.'
   } finally {
@@ -459,7 +482,7 @@ const handleUsernameChange = async () => {
   }
 }
 
-// --- 5. UBAH QUOTES / MOTTO ---
+// --- 5. UBAH QUOTES ---
 const openQuotesFormModal = () => {
   isConfirmQuotesModalOpen.value = false
   tempQuotes.value = user.quotes
@@ -479,6 +502,7 @@ const handleQuotesChange = async () => {
     })
     user.quotes = data.quotes
     isQuotesFormModalOpen.value = false
+    showNotice('Berhasil', 'Quotes / Slogan berhasil diperbarui!', false)
   } catch (err) {
     formError.value = 'Gagal memperbarui quotes.'
   } finally {
@@ -514,8 +538,8 @@ const handlePasswordChange = async () => {
       headers: { Authorization: `Bearer ${authToken.value}` },
       body: { password: passwordForm.newPassword }
     })
-    alert('Password berhasil diubah!')
     isPasswordFormModalOpen.value = false
+    showNotice('Berhasil', 'Password akun Anda berhasil diubah!', false)
   } catch (err) {
     errorMessage.value = 'Gagal memperbarui password.'
   } finally {
