@@ -5,12 +5,12 @@
       <slot />
     </div>
 
-    <!-- Hidden File Input untuk Tombol Posting Foto -->
+    <!-- Hidden File Input untuk Tombol Posting Foto (Mendukung iPhone/HEIC) -->
     <input 
       type="file" 
       ref="postFileInputRef" 
       @change="handlePhotoSelected" 
-      accept="image/*" 
+      accept="image/png, image/jpeg, image/jpg, image/heic, image/heif, image/*" 
       class="hidden" 
     />
 
@@ -94,9 +94,20 @@
 
         <!-- Body -->
         <div class="p-4 space-y-3 overflow-y-auto flex-1 min-h-0">
-          <div class="relative rounded-2xl overflow-hidden bg-slate-900 border border-slate-200 flex items-center justify-center max-h-[220px] sm:max-h-[260px] w-full">
-            <img :src="previewImage" class="max-h-[220px] sm:max-h-[260px] w-full object-contain" />
+          <div class="relative rounded-2xl overflow-hidden bg-slate-900 border border-slate-200 flex items-center justify-center max-h-[220px] sm:max-h-[260px] w-full min-h-[160px]">
+            <!-- Spinner saat mengonversi HEIC -->
+            <div v-if="isConvertingHeic" class="flex flex-col items-center gap-2 text-white p-4">
+              <svg class="animate-spin h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              <span class="text-xs font-medium">Memproses foto iPhone...</span>
+            </div>
+
+            <img v-else-if="previewImage" :src="previewImage" class="max-h-[220px] sm:max-h-[260px] w-full object-contain" />
+            
             <button 
+              v-if="!isConvertingHeic"
               @click="triggerPostPicker" 
               class="absolute top-2 right-2 bg-black/75 hover:bg-black text-white text-[10px] font-semibold px-3 py-1.5 rounded-full backdrop-blur-md transition shadow-sm"
             >
@@ -127,7 +138,7 @@
           </button>
           <button 
             @click="submitPost" 
-            :disabled="isSubmittingPost" 
+            :disabled="isSubmittingPost || isConvertingHeic" 
             class="flex-1 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition flex items-center justify-center gap-2 shadow-md disabled:opacity-50"
           >
             <svg v-if="isSubmittingPost" class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
@@ -166,6 +177,7 @@ const previewImage = ref(null)
 const postCaption = ref('')
 const isUploadModalOpen = ref(false)
 const isSubmittingPost = ref(false)
+const isConvertingHeic = ref(false)
 const uploadError = ref('')
 
 const triggerPostPicker = () => {
@@ -175,15 +187,49 @@ const triggerPostPicker = () => {
   }
 }
 
-const handlePhotoSelected = (event) => {
-  const file = event.target.files[0]
+const handlePhotoSelected = async (event) => {
+  let file = event.target.files[0]
   if (!file) return
 
-  selectedFile.value = file
-  previewImage.value = URL.createObjectURL(file)
   uploadError.value = ''
   postCaption.value = ''
   isUploadModalOpen.value = true
+
+  // Cek apakah file dari iPhone berformat HEIC / HEIF
+  const isHeic = file.type.includes('heic') || 
+                 file.type.includes('heif') || 
+                 file.name.toLowerCase().endsWith('.heic') || 
+                 file.name.toLowerCase().endsWith('.heif')
+
+  if (isHeic) {
+    isConvertingHeic.value = true
+    try {
+      // Import dinamis library heic2any
+      const heic2any = (await import('heic2any')).default
+      
+      const convertedBlob = await heic2any({
+        blob: file,
+        toType: 'image/jpeg',
+        quality: 0.8
+      })
+
+      const blobResult = Array.isArray(convertedBlob) ? convertedBlob[0] : convertedBlob
+      
+      // Ubah nama file menjadi ekstensi .jpg
+      const newFileName = file.name.replace(/\.(heic|HEIC|heif|HEIF)$/, '.jpg')
+      file = new File([blobResult], newFileName, { type: 'image/jpeg' })
+    } catch (err) {
+      console.error('Gagal mengonversi foto HEIC:', err)
+      uploadError.value = 'Gagal memproses foto dari iPhone. Silakan pilih foto lain.'
+      isConvertingHeic.value = false
+      return
+    } finally {
+      isConvertingHeic.value = false
+    }
+  }
+
+  selectedFile.value = file
+  previewImage.value = URL.createObjectURL(file)
 }
 
 const cancelPostModal = () => {
@@ -191,6 +237,7 @@ const cancelPostModal = () => {
   selectedFile.value = null
   previewImage.value = null
   postCaption.value = ''
+  isConvertingHeic.value = false
 }
 
 const submitPost = async () => {
