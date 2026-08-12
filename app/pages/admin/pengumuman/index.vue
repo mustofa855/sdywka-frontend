@@ -116,8 +116,9 @@
               <td class="py-4 px-6 whitespace-nowrap">
                 <a 
                   v-if="item.lampiran" 
-                  :href="item.lampiran" 
+                  :href="getFileUrl(item.lampiran)" 
                   target="_blank" 
+                  rel="noopener noreferrer"
                   class="inline-flex items-center gap-1.5 px-3 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-bold rounded-lg border border-blue-200 transition"
                 >
                   <span>📄 Unduh File</span>
@@ -243,11 +244,11 @@
               <input 
                 type="file" 
                 @change="handleFileUpload" 
-                accept=".pdf,.doc,.docx"
+                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.webp"
                 class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
               />
               <p v-if="existingFileUrl && !selectedFile" class="text-xs text-emerald-600 mt-2 font-medium">
-                ✓ File lampiran terpasang: <a :href="existingFileUrl" target="_blank" class="underline font-bold">Lihat File</a>
+                ✓ File lampiran terpasang: <a :href="getFileUrl(existingFileUrl)" target="_blank" rel="noopener noreferrer" class="underline font-bold">Lihat File</a>
               </p>
             </div>
 
@@ -368,7 +369,7 @@ definePageMeta({ layout: 'admin' })
 
 // Ambil runtime configuration dari nuxt.config.ts / .env
 const config = useRuntimeConfig()
-const API_BASE = config.public.apiBase
+const API_BASE = config.public.apiBase || 'http://localhost:8000'
 
 const API_BASE_URL = `${API_BASE}/api/admin-api/pengumuman/`
 
@@ -379,6 +380,17 @@ const token = useCookie('auth_token')
 const getAuthHeaders = () => ({
   Authorization: token.value ? `Bearer ${token.value}` : ''
 })
+
+// Fungsi Penentu URL File Lampiran Lengkap (Absolut)
+const getFileUrl = (fileUrl) => {
+  if (!fileUrl) return '#'
+  if (fileUrl.startsWith('http://') || fileUrl.startsWith('https://')) {
+    return fileUrl
+  }
+  const baseUrl = API_BASE.replace(/\/api\/?$/, '')
+  const cleanPath = fileUrl.startsWith('/') ? fileUrl : `/${fileUrl}`
+  return `${baseUrl}${cleanPath}`
+}
 
 const searchQuery = ref('')
 const selectedKategori = ref('Semua')
