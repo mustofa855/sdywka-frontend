@@ -485,7 +485,7 @@ const openModalEdit = (item) => {
   form.prioritas = item.prioritas
   form.tanggal = item.tanggal
   form.target = item.target
-  form.is_pinned = item.is_pinned
+  form.is_pinned = Boolean(item.is_pinned)
   form.ringkasan = item.ringkasan || ''
   form.isi_pengumuman = item.isi_pengumuman
   selectedFile.value = null
@@ -506,8 +506,8 @@ const submitForm = async () => {
     formData.append('prioritas', form.prioritas)
     formData.append('tanggal', form.tanggal)
     formData.append('target', form.target)
-    formData.append('is_pinned', form.is_pinned)
-    formData.append('ringkasan', form.ringkasan)
+    formData.append('is_pinned', form.is_pinned ? 'true' : 'false')
+    formData.append('ringkasan', form.ringkasan || '')
     formData.append('isi_pengumuman', form.isi_pengumuman)
 
     if (selectedFile.value) {
@@ -530,6 +530,7 @@ const submitForm = async () => {
 
     closeModal()
     refresh()
+    showAlert('Berhasil', isEditMode.value ? 'Pengumuman berhasil diperbarui.' : 'Pengumuman berhasil diterbitkan.', 'success')
   } catch (error) {
     showAlert('Gagal Menyimpan', 'Gagal menyimpan pengumuman. Mohon periksa kembali server backend Django Anda.', 'danger')
     console.error(error)
@@ -553,6 +554,7 @@ const hapusPengumuman = async () => {
     })
     showDeleteModal.value = false
     refresh()
+    showAlert('Berhasil', 'Pengumuman berhasil dihapus.', 'success')
   } catch (error) {
     showAlert('Gagal Menghapus', 'Gagal menghapus data pengumuman.', 'danger')
     console.error(error)
