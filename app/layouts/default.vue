@@ -1,8 +1,9 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 
 const isMobileMenuOpen = ref(false)
 const isLoginModalOpen = ref(false)
+const showScrollTop = ref(false)
 
 const authToken = useCookie('auth_token')
 const authUser = useCookie('auth_user')
@@ -29,11 +30,30 @@ const userPortalPath = computed(() => {
   return '/user/'
 })
 
+// Fungsi & Listener Scroll untuk Tombol Kembali ke Atas
+const handleScroll = () => {
+  if (typeof window !== 'undefined') {
+    showScrollTop.value = window.scrollY > 300
+  }
+}
+
 const scrollToTop = () => {
   if (typeof window !== 'undefined') {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 }
+
+onMounted(() => {
+  if (typeof window !== 'undefined') {
+    window.addEventListener('scroll', handleScroll)
+  }
+})
+
+onUnmounted(() => {
+  if (typeof window !== 'undefined') {
+    window.removeEventListener('scroll', handleScroll)
+  }
+})
 
 const closeMobileMenu = () => {
   isMobileMenuOpen.value = false
@@ -331,7 +351,7 @@ const socialLinks = [
     </Teleport>
 
     <!-- FOOTER RESPONSIF DAN PROFESIONAL -->
-    <footer class="bg-slate-900 text-slate-300 pt-12 md:pt-16 pb-8 border-t border-slate-800 relative overflow-hidden">
+    <footer class="bg-slate-900 text-slate-300 pt-12 md:pt-16 pb-12 border-t border-slate-800 relative overflow-hidden">
       <div
         class="absolute inset-0 opacity-5 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:16px_16px]">
       </div>
@@ -424,8 +444,7 @@ const socialLinks = [
 
           <!-- Kolom 2: Navigasi Cepat -->
           <div>
-            <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-4 border-b border-slate-800 pb-2">Tautan
-              Cepat</h4>
+            <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-4 border-b border-slate-800 pb-2">Tautan Cepat</h4>
             <ul class="space-y-2 text-xs font-medium">
               <li>
                 <NuxtLink to="/profil" class="hover:text-amber-400 transition-colors">Profil Sekolah</NuxtLink>
@@ -447,8 +466,7 @@ const socialLinks = [
 
           <!-- Kolom 3: Kontak & Alamat -->
           <div>
-            <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-4 border-b border-slate-800 pb-2">Kontak
-              Kami</h4>
+            <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-4 border-b border-slate-800 pb-2">Kontak Kami</h4>
             <ul class="space-y-2.5 text-xs text-slate-400 leading-relaxed">
               <li class="flex items-start gap-2.5">
                 <span class="text-amber-400">📍</span>
@@ -475,8 +493,7 @@ const socialLinks = [
 
           <!-- Kolom 4: Jam Operasional -->
           <div>
-            <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-4 border-b border-slate-800 pb-2">Jam
-              Sekolah</h4>
+            <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-4 border-b border-slate-800 pb-2">Jam Sekolah</h4>
             <ul class="space-y-2 text-xs text-slate-400">
               <li class="flex justify-between">
                 <span>Senin - Kamis:</span>
@@ -495,19 +512,31 @@ const socialLinks = [
 
         </div>
 
-        <!-- Copyright & Back to Top -->
-        <div
-          class="pt-8 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+        <!-- Copyright -->
+        <div class="pt-8 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 sm:pr-20">
           <p>&copy; 2026 SD YWKA REL HOMY SCHOOL Bandung. All rights reserved.</p>
-          <button @click="scrollToTop"
-            class="inline-flex items-center gap-1.5 text-amber-400 hover:text-amber-300 font-semibold transition-colors">
-            Kembali ke Atas &uarr;
-          </button>
         </div>
       </div>
     </footer>
 
-    <!-- FLOATING WHATSAPP BUTTON (MELAYANG DI POJOK KANAN BAWAH) -->
+    <!-- FLOATING ACTIONS (POJOK KANAN BAWAH) -->
+    
+    <!-- 1. FLOATING BACK TO TOP BUTTON (DI ATAS WA) -->
+    <transition name="fade">
+      <button
+        v-if="showScrollTop"
+        @click="scrollToTop"
+        aria-label="Kembali ke Atas"
+        class="fixed bottom-24 right-6 z-50 flex items-center justify-center w-12 h-12 rounded-full bg-slate-900/90 backdrop-blur border border-slate-700/80 text-amber-400 shadow-2xl hover:bg-slate-800 hover:text-amber-300 hover:scale-110 active:scale-95 transition-all duration-300 focus:outline-none group"
+        title="Kembali ke Atas"
+      >
+        <svg class="w-5 h-5 transition-transform duration-300 group-hover:-translate-y-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+        </svg>
+      </button>
+    </transition>
+
+    <!-- 2. FLOATING WHATSAPP BUTTON -->
     <div class="fixed bottom-6 right-6 z-50 flex items-center group">
       <!-- Tooltip Label Saat Hover -->
       <a
@@ -542,6 +571,18 @@ const socialLinks = [
 </template>
 
 <style scoped>
+/* Animasi Fade In / Out untuk Tombol Floating Back to Top */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(12px) scale(0.9);
+}
+
 /* Animasi Transisi Modal */
 .modal-enter-active,
 .modal-leave-active {
