@@ -427,11 +427,6 @@ const handleLogout = async () => {
 }
 
 // --- 3. UBAH FOTO PROFIL ---
-const triggerFileInput = () => {
-  isConfirmAvatarModalOpen.value = false
-  if (fileInputRef.value) fileInputRef.value.click()
-}
-
 const handleAvatarSelected = async (event) => {
   const file = event.target.files[0]
   if (!file) return
@@ -447,6 +442,16 @@ const handleAvatarSelected = async (event) => {
     })
     
     user.foto = data.foto || data.foto_profil || user.foto
+    
+    // Perbarui cookie auth_user agar sinkron di seluruh halaman
+    if (authUser.value) {
+      try {
+        const parsed = typeof authUser.value === 'string' ? JSON.parse(authUser.value) : authUser.value
+        parsed.foto_profil = user.foto
+        authUser.value = parsed
+      } catch (e) {}
+    }
+
     showNotice('Berhasil', 'Foto profil berhasil diperbarui!', false)
   } catch (err) {
     showNotice('Gagal', err.data?.message || 'Gagal mengunggah foto profil. Pastikan ukuran foto tidak terlalu besar.', true)
@@ -454,13 +459,6 @@ const handleAvatarSelected = async (event) => {
 }
 
 // --- 4. UBAH USERNAME ---
-const openUsernameFormModal = () => {
-  isConfirmUsernameModalOpen.value = false
-  tempUsername.value = user.username
-  formError.value = ''
-  isUsernameFormModalOpen.value = true
-}
-
 const handleUsernameChange = async () => {
   if (!tempUsername.value.trim()) return
   isSubmitting.value = true
@@ -473,6 +471,15 @@ const handleUsernameChange = async () => {
       body: { username: tempUsername.value.trim() }
     })
     user.username = data.username
+
+    if (authUser.value) {
+      try {
+        const parsed = typeof authUser.value === 'string' ? JSON.parse(authUser.value) : authUser.value
+        parsed.username = data.username
+        authUser.value = parsed
+      } catch (e) {}
+    }
+
     isUsernameFormModalOpen.value = false
     showNotice('Berhasil', 'Username berhasil diperbarui!', false)
   } catch (err) {
@@ -483,13 +490,6 @@ const handleUsernameChange = async () => {
 }
 
 // --- 5. UBAH QUOTES ---
-const openQuotesFormModal = () => {
-  isConfirmQuotesModalOpen.value = false
-  tempQuotes.value = user.quotes
-  formError.value = ''
-  isQuotesFormModalOpen.value = true
-}
-
 const handleQuotesChange = async () => {
   isSubmitting.value = true
   formError.value = ''
@@ -504,7 +504,7 @@ const handleQuotesChange = async () => {
     isQuotesFormModalOpen.value = false
     showNotice('Berhasil', 'Quotes / Slogan berhasil diperbarui!', false)
   } catch (err) {
-    formError.value = 'Gagal memperbarui quotes.'
+    formError.value = err.data?.message || 'Gagal memperbarui quotes.'
   } finally {
     isSubmitting.value = false
   }
