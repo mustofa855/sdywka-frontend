@@ -354,6 +354,36 @@ const passwordForm = reactive({
   confirmPassword: ''
 })
 
+// --- PEMICU MODAL YANG DIPERBAIKI ---
+const triggerFileInput = () => {
+  isConfirmAvatarModalOpen.value = false
+  if (fileInputRef.value) {
+    fileInputRef.value.click()
+  }
+}
+
+const openUsernameFormModal = () => {
+  isConfirmUsernameModalOpen.value = false
+  tempUsername.value = user.username || ''
+  formError.value = ''
+  isUsernameFormModalOpen.value = true
+}
+
+const openQuotesFormModal = () => {
+  isConfirmQuotesModalOpen.value = false
+  tempQuotes.value = user.quotes || ''
+  formError.value = ''
+  isQuotesFormModalOpen.value = true
+}
+
+const openPasswordFormModal = () => {
+  isConfirmPasswordModalOpen.value = false
+  passwordForm.newPassword = ''
+  passwordForm.confirmPassword = ''
+  errorMessage.value = ''
+  isPasswordFormModalOpen.value = true
+}
+
 // --- 1. AMBIL DATA PROFIL ---
 const fetchUserProfile = async () => {
   isLoadingProfile.value = true
@@ -362,9 +392,9 @@ const fetchUserProfile = async () => {
     try {
       const parsedUser = typeof authUser.value === 'string' ? JSON.parse(authUser.value) : authUser.value
       if (parsedUser) {
-        user.nama = parsedUser.nama_lengkap || parsedUser.username || 'Pengguna'
+        user.nama = parsedUser.nama_lengkap || parsedUser.nama || parsedUser.username || 'Pengguna'
         user.username = parsedUser.username || ''
-        user.foto = parsedUser.foto_profil || ''
+        user.foto = parsedUser.foto_profil || parsedUser.foto || ''
       }
     } catch (e) {
       console.warn('Gagal membaca cookie auth_user:', e)
@@ -379,7 +409,7 @@ const fetchUserProfile = async () => {
       headers: { Authorization: `Bearer ${authToken.value}` }
     })
 
-    user.nama = data.nama || 'Pengguna'
+    user.nama = data.nama || data.nama_lengkap || 'Pengguna'
     user.username = data.username || ''
     user.quotes = data.quotes || 'bismillah ayo bisa'
     user.foto = data.foto || ''
@@ -428,7 +458,7 @@ const handleLogout = async () => {
 
 // --- 3. UBAH FOTO PROFIL ---
 const handleAvatarSelected = async (event) => {
-  const file = event.target.files[0]
+  const file = event.target.files?.[0]
   if (!file) return
 
   const formData = new FormData()
@@ -443,7 +473,6 @@ const handleAvatarSelected = async (event) => {
     
     user.foto = data.foto || data.foto_profil || user.foto
     
-    // Perbarui cookie auth_user agar sinkron di seluruh halaman
     if (authUser.value) {
       try {
         const parsed = typeof authUser.value === 'string' ? JSON.parse(authUser.value) : authUser.value
@@ -455,6 +484,8 @@ const handleAvatarSelected = async (event) => {
     showNotice('Berhasil', 'Foto profil berhasil diperbarui!', false)
   } catch (err) {
     showNotice('Gagal', err.data?.message || 'Gagal mengunggah foto profil. Pastikan ukuran foto tidak terlalu besar.', true)
+  } finally {
+    if (event.target) event.target.value = ''
   }
 }
 
@@ -511,14 +542,6 @@ const handleQuotesChange = async () => {
 }
 
 // --- 6. UBAH PASSWORD ---
-const openPasswordFormModal = () => {
-  isConfirmPasswordModalOpen.value = false
-  passwordForm.newPassword = ''
-  passwordForm.confirmPassword = ''
-  errorMessage.value = ''
-  isPasswordFormModalOpen.value = true
-}
-
 const handlePasswordChange = async () => {
   if (passwordForm.newPassword.length < 6) {
     errorMessage.value = 'Password minimal 6 karakter!'
@@ -541,7 +564,7 @@ const handlePasswordChange = async () => {
     isPasswordFormModalOpen.value = false
     showNotice('Berhasil', 'Password akun Anda berhasil diubah!', false)
   } catch (err) {
-    errorMessage.value = 'Gagal memperbarui password.'
+    errorMessage.value = err.data?.message || 'Gagal memperbarui password.'
   } finally {
     isSubmitting.value = false
   }
