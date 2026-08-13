@@ -338,7 +338,7 @@ const closeModal = () => {
                 @click="openQuickView(item)" 
                 class="text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors flex items-center gap-1"
               >
-                👁️ Pratinjau
+                  Pratinjau
               </button>
               
               <NuxtLink 

@@ -119,7 +119,7 @@
                   @click="openDocumentModal(item)" 
                   class="inline-flex items-center gap-1.5 px-3 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-bold rounded-lg border border-blue-200 transition cursor-pointer"
                 >
-                  <span>👁️ Lihat Dokumen</span>
+                  <span>  Lihat Dokumen</span>
                 </button>
                 <span v-else class="text-slate-400 text-xs italic">Tidak Ada</span>
               </td>
@@ -252,7 +252,7 @@
                   @click="openDocumentModal({ id: editingId, lampiran: existingFileUrl, judul: form.judul })" 
                   class="underline font-bold text-blue-600 hover:text-blue-800 cursor-pointer"
                 >
-                  👁️ Lihat Dokumen
+                    Lihat Dokumen
                 </button>
               </p>
             </div>
