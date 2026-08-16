@@ -10,7 +10,7 @@ useSeoMeta({
   ogTitle: 'Profil Resmi SD YWKA REL HOMY SCHOOL Bandung',
   description: 'Profil resmi, Sejarah, Visi Misi, Core Values JUARA, Akreditasi A, Struktur Organisasi, dan Fasilitas SD YWKA REL HOMY SCHOOL Bandung.',
   ogDescription: 'Profil resmi, Sejarah, Visi Misi, Core Values JUARA, Akreditasi A, Struktur Organisasi, dan Fasilitas SD YWKA REL HOMY SCHOOL Bandung.',
-  keywords: 'SD YWKA Bandung, SD YWKA REL HOMY SCHOOL, Sekolah Dasar Bandung, SD Swasta Andir Bandung, Sekolah Kurikulum Merdeka Bandung, SD Tahfidz Bandung',
+  keywords: 'SD YWKA REL HOMY SCHOOL, SD YWKA REL HOMY SCHOOL, Sekolah Dasar Bandung, SD Swasta Andir Bandung, Sekolah Kurikulum Merdeka Bandung, SD Tahfidz Bandung',
   ogType: 'website',
   ogLocale: 'id_ID',
   twitterCard: 'summary_large_image',
@@ -29,7 +29,7 @@ useHead({
         '@context': 'https://schema.org',
         '@type': 'ElementarySchool',
         'name': 'SD YWKA REL HOMY SCHOOL Bandung',
-        'alternateName': 'SD YWKA Bandung',
+        'alternateName': 'SD YWKA REL HOMY SCHOOL',
         'url': 'https://sdywka.sch.id/profil',
         'logo': 'https://sdywka.sch.id/logo.png',
         'description': 'Sekolah Dasar Swasta Terakreditasi A di Bandung dengan Kurikulum Merdeka dan Penguatan Karakter Imtaq (Tahsin & Tahfidz).',
@@ -189,7 +189,7 @@ const strukturOrganisasi = ref([
   {
     kategori: 'Pimpinan & Manajemen Sekolah',
     anggota: [
-      { jabatan: 'Kepala Sekolah', nama: 'Pimpinan SD YWKA Bandung', roleClass: 'bg-slate-900 text-white' },
+      { jabatan: 'Kepala Sekolah', nama: 'Pimpinan SD YWKA REL HOMY SCHOOL', roleClass: 'bg-slate-900 text-white' },
       { jabatan: 'Koordinator Kurikulum & Akademik', name: 'Tim Kurikulum YWKA', roleClass: 'bg-slate-800 text-white' },
       { jabatan: 'Koordinator Kesiswaan & Ekstrakurikuler', name: 'Tim Kesiswaan YWKA', roleClass: 'bg-slate-800 text-white' },
       { jabatan: 'Koordinator Keagamaan & Tahfidz', name: 'Tim Imtaq & Tahsin', roleClass: 'bg-slate-800 text-white' }
@@ -240,7 +240,7 @@ const fasilitasList = ref([
                 <img 
                   v-if="fotoKepalaSekolahUrl && !imageError" 
                   :src="fotoKepalaSekolahUrl" 
-                  :alt="`Foto Kepala Sekolah ${namaKepalaSekolah || 'SD YWKA Bandung'}`"
+                  :alt="`Foto Kepala Sekolah ${namaKepalaSekolah || 'SD YWKA REL HOMY SCHOOL'}`"
                   @error="handleImageError"
                   width="208"
                   height="208"
@@ -267,7 +267,7 @@ const fasilitasList = ref([
               <span>Kata Sambutan</span>
             </div>
             <h2 class="text-2xl sm:text-3xl font-black text-slate-900 mb-6 leading-tight">
-              Selamat Datang di SD YWKA Bandung
+              Selamat Datang di SD YWKA REL HOMY SCHOOL
             </h2>
             
             <div class="space-y-4 text-slate-600 text-sm sm:text-base leading-relaxed">
@@ -304,7 +304,7 @@ const fasilitasList = ref([
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="max-w-3xl mx-auto text-center mb-10">
           <span class="text-xs font-bold uppercase tracking-widest text-amber-600">Jejak Langkah</span>
-          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">Sejarah & Latar Belakang SD YWKA Bandung</h2>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">Sejarah & Latar Belakang SD YWKA REL HOMY SCHOOL</h2>
           <div class="w-12 h-1 bg-amber-500 mx-auto mt-3 rounded-full"></div>
         </div>
 
@@ -315,7 +315,7 @@ const fasilitasList = ref([
             </template>
             <template v-else>
               <p>
-                <strong class="text-slate-900">SD YWKA Bandung</strong> didirikan di bawah naungan <strong class="text-slate-900">Yayasan Wanita Kereta Api (YWKA)</strong>, sebuah lembaga sosial pendidikan yang berakar kuat dari keluarga besar Kereta Api Indonesia (PT KAI). Berlokasi strategis di kawasan Andir, Kota Bandung, sekolah ini telah menjadi rumah belajar bagi ribuan alumni selama berdekade-dekade.
+                <strong class="text-slate-900">SD YWKA REL HOMY SCHOOL</strong> didirikan di bawah naungan <strong class="text-slate-900">Yayasan Wanita Kereta Api (YWKA)</strong>, sebuah lembaga sosial pendidikan yang berakar kuat dari keluarga besar Kereta Api Indonesia (PT KAI). Berlokasi strategis di kawasan Andir, Kota Bandung, sekolah ini telah menjadi rumah belajar bagi ribuan alumni selama berdekade-dekade.
               </p>
               <p>
                 Seiring berkembangnya zaman, SD YWKA terus bertransformasi dengan mengadopsi tagline <strong class="text-slate-900 font-semibold">REL HOMY SCHOOL</strong> dan berpedoman pada karakter <strong class="text-amber-600 font-bold">JUARA</strong>. Konsep ini memadukan nilai keagamaan yang kuat, inovasi kurikulum modern, serta suasana belajar yang hangat.
@@ -367,7 +367,7 @@ const fasilitasList = ref([
           </h2>
           
           <div class="pt-4 flex items-center justify-center space-x-2 text-xs font-semibold uppercase tracking-widest text-slate-400">
-            <span>SD YWKA Bandung</span>
+            <span>SD YWKA REL HOMY SCHOOL</span>
             <span>•</span>
             <span class="text-amber-400">REL HOMY SCHOOL</span>
           </div>
@@ -446,7 +446,7 @@ const fasilitasList = ref([
         <div class="flex items-center space-x-3 mb-8">
           <div class="w-2 h-8 bg-amber-500 rounded-full"></div>
           <div>
-            <h3 class="text-2xl font-black text-slate-900">Misi SD YWKA Bandung</h3>
+            <h3 class="text-2xl font-black text-slate-900">Misi SD YWKA REL HOMY SCHOOL</h3>
             <p class="text-slate-500 text-xs sm:text-sm mt-0.5">Langkah Strategis dalam Mewujudkan Visi & Karakter JUARA</p>
           </div>
         </div>
@@ -492,7 +492,7 @@ const fasilitasList = ref([
         <div class="text-center mb-10">
           <span class="text-xs font-extrabold uppercase tracking-widest text-amber-600">Data Legalitas</span>
           <h2 class="text-2xl sm:text-3xl font-black text-slate-900 mt-0.5">Identitas Resmi Sekolah</h2>
-          <p class="text-slate-500 text-xs sm:text-sm mt-1">Data Administrasi dan Kelembagaan SD YWKA Bandung</p>
+          <p class="text-slate-500 text-xs sm:text-sm mt-1">Data Administrasi dan Kelembagaan SD YWKA REL HOMY SCHOOL</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -571,14 +571,14 @@ const fasilitasList = ref([
     <section class="bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 text-white py-12 border-t border-slate-800 relative overflow-hidden">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center flex flex-col sm:flex-row items-center justify-between gap-6 relative z-10">
         <div class="text-center sm:text-left">
-          <h2 class="text-xl sm:text-2xl font-black">Tertarik Menjadi Bagian dari SD YWKA Bandung?</h2>
+          <h2 class="text-xl sm:text-2xl font-black">Tertarik Menjadi Bagian dari SD YWKA REL HOMY SCHOOL?</h2>
           <p class="text-slate-300 text-xs sm:text-sm mt-1">Mari bergabung bersama keluarga besar SD YWKA REL HOMY SCHOOL.</p>
         </div>
         <a 
           href="https://wa.me/62895344044455" 
           target="_blank" 
           rel="noopener noreferrer" 
-          aria-label="Hubungi PPDB SD YWKA Bandung via WhatsApp"
+          aria-label="Hubungi PPDB SD YWKA REL HOMY SCHOOL via WhatsApp"
           class="inline-flex items-center bg-amber-500 hover:bg-amber-400 text-slate-950 font-black px-7 py-3.5 rounded-2xl transition-all duration-200 shadow-xl hover:shadow-amber-500/20 text-sm transform hover:-translate-y-0.5"
         >
           <svg class="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.096 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>

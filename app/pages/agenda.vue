@@ -65,7 +65,7 @@ const defaultEvents = [
     tanggal_mulai: '2026-09-14',
     tanggal_selesai: '2026-09-19',
     waktu: '07:30 - 12:00 WIB',
-    lokasi: 'Ruang Kelas SD YWKA Bandung',
+    lokasi: 'Ruang Kelas SD YWKA REL HOMY SCHOOL',
     penyelenggara: 'Tim Kurikulum SD YWKA',
     ringkasan: 'Kegiatan evaluasi pembelajaran pertengahan semester ganjil.',
     deskripsi: 'Kegiatan evaluasi pembelajaran pertengahan semester untuk mengukur capaian kompetensi peserta didik pada semester ganjil. Diharapkan seluruh siswa hadir tepat waktu.',
@@ -221,7 +221,7 @@ const closeModal = () => {
 // ----------------------------------------------------------------
 
 const pageTitle = 'Agenda & Kegiatan Sekolah - SD YWKA REL HOMY SCHOOL Bandung'
-const pageDescription = 'Jadwal agenda acara, kegiatan akademik, keagamaan, perlombaan, dan kalender kegiatan terbaru SD YWKA Bandung.'
+const pageDescription = 'Jadwal agenda acara, kegiatan akademik, keagamaan, perlombaan, dan kalender kegiatan terbaru SD YWKA REL HOMY SCHOOL.'
 const canonicalUrl = 'https://sdywkabandung.sch.id/agenda'
 
 // Dynamic Meta Tags (Open Graph, Twitter)
@@ -232,7 +232,7 @@ useSeoMeta({
   ogDescription: pageDescription,
   ogType: 'website',
   ogUrl: canonicalUrl,
-  ogSiteName: 'SD YWKA Bandung',
+  ogSiteName: 'SD YWKA REL HOMY SCHOOL',
   twitterCard: 'summary_large_image',
   twitterTitle: pageTitle,
   twitterDescription: pageDescription,
@@ -260,7 +260,7 @@ useHead({
             'eventAttendanceMode': 'https://schema.org/OfflineEventAttendanceMode',
             'location': {
               '@type': 'Place',
-              'name': event.lokasi || 'SD YWKA Bandung',
+              'name': event.lokasi || 'SD YWKA REL HOMY SCHOOL',
               'address': {
                 '@type': 'PostalAddress',
                 'streetAddress': 'Jl. Stasiun Barat No. 1',
@@ -271,7 +271,7 @@ useHead({
             },
             'organizer': {
               '@type': 'EducationalOrganization',
-              'name': event.penyelenggara || 'SD YWKA Bandung',
+              'name': event.penyelenggara || 'SD YWKA REL HOMY SCHOOL',
               'url': 'https://sdywkabandung.sch.id'
             },
             'image': getPosterUrl(event.poster) || 'https://sdywkabandung.sch.id/logo.png'
@@ -281,7 +281,7 @@ useHead({
         return JSON.stringify({
           '@context': 'https://schema.org',
           '@type': 'ItemList',
-          'name': 'Agenda & Kegiatan SD YWKA Bandung',
+          'name': 'Agenda & Kegiatan SD YWKA REL HOMY SCHOOL',
           'itemListElement': eventsList.map((evt, idx) => ({
             '@type': 'ListItem',
             'position': idx + 1,
@@ -309,7 +309,7 @@ useHead({
           AGENDA & <span class="text-amber-400">KEGIATAN</span>
         </h1>
         <p class="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto mt-3 font-normal leading-relaxed">
-          Pantau seluruh jadwal kegiatan akademik, keagamaan, lomba, serta acara penting peserta didik di <span class="font-medium text-slate-100">SD YWKA Bandung</span>.
+          Pantau seluruh jadwal kegiatan akademik, keagamaan, lomba, serta acara penting peserta didik di <span class="font-medium text-slate-100">SD YWKA REL HOMY SCHOOL</span>.
         </p>
       </div>
     </header>
@@ -459,7 +459,7 @@ useHead({
                   <svg class="w-4 h-4 text-slate-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
-                  <span class="truncate">{{ event.lokasi || 'SD YWKA Bandung' }}</span>
+                  <span class="truncate">{{ event.lokasi || 'SD YWKA REL HOMY SCHOOL' }}</span>
                 </div>
               </div>
             </div>
@@ -552,13 +552,13 @@ useHead({
               <div>
                 <span class="text-slate-400 font-semibold block text-[11px] uppercase">Lokasi Acara</span>
                 <p class="font-bold text-slate-800 mt-0.5">
-                  {{ selectedEvent.lokasi || 'SD YWKA Bandung' }}
+                  {{ selectedEvent.lokasi || 'SD YWKA REL HOMY SCHOOL' }}
                 </p>
               </div>
 
               <div>
                 <span class="text-slate-400 font-semibold block text-[11px] uppercase">Penyelenggara</span>
-                <p class="font-semibold text-slate-800 mt-0.5">{{ selectedEvent.penyelenggara || 'SD YWKA Bandung' }}</p>
+                <p class="font-semibold text-slate-800 mt-0.5">{{ selectedEvent.penyelenggara || 'SD YWKA REL HOMY SCHOOL' }}</p>
               </div>
             </div>
 

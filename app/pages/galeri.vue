@@ -3,9 +3,9 @@
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 
 useHead({
-  title: 'Galeri & Dokumentasi Kegiatan - SD YWKA Bandung',
+  title: 'Galeri & Dokumentasi Kegiatan - SD YWKA REL HOMY SCHOOL',
   meta: [
-    { name: 'description', content: 'Kumpulan foto dokumentasi prestasi, kegiatan pembelajaran, dan momen berharga siswa SD YWKA Bandung.' }
+    { name: 'description', content: 'Kumpulan foto dokumentasi prestasi, kegiatan pembelajaran, dan momen berharga siswa SD YWKA REL HOMY SCHOOL.' }
   ]
 })
 
@@ -217,7 +217,7 @@ onUnmounted(() => {
           GALERI <span class="text-amber-400">KEGIATAN</span>
         </h1>
         <p class="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto mt-3 font-normal leading-relaxed">
-          Rekam jejak prestasi, keceriaan peserta didik, serta ragam kegiatan edukatif di <span class="font-medium text-slate-100">SD YWKA Bandung</span>.
+          Rekam jejak prestasi, keceriaan peserta didik, serta ragam kegiatan edukatif di <span class="font-medium text-slate-100">SD YWKA REL HOMY SCHOOL</span>.
         </p>
       </div>
     </section>

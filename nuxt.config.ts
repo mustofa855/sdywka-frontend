@@ -29,21 +29,21 @@ export default defineNuxtConfig({
   app: {
     head: {
       title: 'SD YWKA REL HOMY SCHOOL',
-      titleTemplate: '%s | SD YWKA Bandung',
+      titleTemplate: '%s | SD YWKA REL HOMY SCHOOL',
       htmlAttrs: {
         lang: 'id'
       },
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: 'Website Resmi SD YWKA Bandung - Sekolah Ramah Anak & Berkarakter.' },
+        { name: 'description', content: 'Website Resmi SD YWKA REL HOMY SCHOOL - Sekolah Ramah Anak & Berkarakter.' },
         { name: 'format-detection', content: 'telephone=no' },
         
         // Open Graph / Social Media Meta Tags
-        { property: 'og:site_name', content: 'SD YWKA Bandung' },
+        { property: 'og:site_name', content: 'SD YWKA REL HOMY SCHOOL' },
         { property: 'og:type', content: 'website' },
         { property: 'og:title', content: 'SD YWKA REL HOMY SCHOOL' },
-        { property: 'og:description', content: 'Website Resmi SD YWKA Bandung' }
+        { property: 'og:description', content: 'Website Resmi SD YWKA REL HOMY SCHOOL' }
       ],
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }

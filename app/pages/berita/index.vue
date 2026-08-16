@@ -19,7 +19,7 @@ useSeoMeta({
   ogImage: seoImage,
   ogUrl: canonicalUrl,
   ogType: 'website',
-  ogSiteName: 'SD YWKA Bandung',
+  ogSiteName: 'SD YWKA REL HOMY SCHOOL',
   twitterCard: 'summary_large_image',
   twitterTitle: seoTitle,
   twitterDescription: seoDescription,
@@ -83,7 +83,7 @@ const schemaJsonLd = computed(() => {
       'url': canonicalUrl,
       'publisher': {
         '@type': 'EducationalOrganization',
-        'name': 'SD YWKA Bandung',
+        'name': 'SD YWKA REL HOMY SCHOOL',
         'logo': `${url.origin}/favicon.ico`
       },
       'mainEntity': {
@@ -172,7 +172,7 @@ const otherNews = computed(() => {
           BERITA & <span class="text-amber-400">KEGIATAN</span>
         </h1>
         <p class="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto mt-3 font-normal leading-relaxed">
-          Ikuti perkembangan informasi terbaru, prestasi, dan ragam aktivitas seru peserta didik di <span class="font-medium text-slate-100">SD YWKA Bandung</span>.
+          Ikuti perkembangan informasi terbaru, prestasi, dan ragam aktivitas seru peserta didik di <span class="font-medium text-slate-100">SD YWKA REL HOMY SCHOOL</span>.
         </p>
       </div>
     </header>

@@ -175,8 +175,8 @@ const downloadDocument = async () => {
 
 const pageTitle = computed(() => {
   return pengumuman.value?.judul
-    ? `${pengumuman.value.judul} - SD YWKA Bandung`
-    : 'Detail Pengumuman - SD YWKA Bandung'
+    ? `${pengumuman.value.judul} - SD YWKA REL HOMY SCHOOL`
+    : 'Detail Pengumuman - SD YWKA REL HOMY SCHOOL'
 })
 
 const pageDescription = computed(() => {
@@ -213,7 +213,7 @@ useSeoMeta({
   ogDescription: pageDescription,
   ogType: 'article',
   ogUrl: canonicalUrl,
-  ogSiteName: 'SD YWKA Bandung',
+  ogSiteName: 'SD YWKA REL HOMY SCHOOL',
   twitterCard: 'summary_large_image',
   twitterTitle: pageTitle,
   twitterDescription: pageDescription,
@@ -240,12 +240,12 @@ useHead({
           },
           'author': {
             '@type': 'Organization',
-            'name': 'SD YWKA Bandung',
+            'name': 'SD YWKA REL HOMY SCHOOL',
             'url': 'https://sdywkabandung.sch.id'
           },
           'publisher': {
             '@type': 'EducationalOrganization',
-            'name': 'SD YWKA Bandung',
+            'name': 'SD YWKA REL HOMY SCHOOL',
             'logo': {
               '@type': 'ImageObject',
               'url': 'https://sdywkabandung.sch.id/logo.png'
@@ -404,7 +404,7 @@ if (process.client) {
             Demikian pengumuman resmi ini kami sampaikan agar dapat menjadi perhatian bersama. Atas kerja sama Bapak/Ibu, kami ucapkan terima kasih.
             <br>
             <strong class="text-slate-800 not-italic block mt-2 font-bold">
-              — Manajemen SD YWKA Bandung
+              — Manajemen SD YWKA REL HOMY SCHOOL
             </strong>
           </footer>
         </div>

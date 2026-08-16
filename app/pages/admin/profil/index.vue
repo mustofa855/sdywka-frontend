@@ -6,7 +6,7 @@ definePageMeta({
 })
 
 useHead({
-  title: 'Manajemen Profil, Banner & Akun - Admin SD YWKA Bandung'
+  title: 'Manajemen Profil, Banner & Akun - Admin SD YWKA REL HOMY SCHOOL'
 })
 
 const getBaseUrl = () => {

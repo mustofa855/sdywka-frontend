@@ -266,7 +266,7 @@
                 <p
                   class="text-[11px] font-extrabold tracking-wider text-amber-400 leading-none"
                 >
-                  SD YWKA BANDUNG
+                  SD YWKA REL HOMY SCHOOL
                 </p>
 
                 <p
@@ -450,7 +450,7 @@
               <div class="print-card-header-text">
 
                 <p class="print-header-title">
-                  SD YWKA BANDUNG
+                  SD YWKA REL HOMY SCHOOL
                 </p>
 
                 <p class="print-header-sub">

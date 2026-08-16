@@ -226,7 +226,7 @@ const handleLogin = async () => {
           </span>
           <img src="/logo-ywka.png" alt="Logo YWKA" class="w-10 h-10 object-contain" onerror="this.src='https://via.placeholder.com/40'" />
         </div>
-        <h1 class="text-xl font-bold text-slate-900 tracking-tight leading-none mb-1">SD YWKA Bandung</h1>
+        <h1 class="text-xl font-bold text-slate-900 tracking-tight leading-none mb-1">SD YWKA REL HOMY SCHOOL Bandung</h1>
         <p class="text-xs font-medium text-slate-500">Sistem Informasi Terpadu</p>
       </div>
 
@@ -320,7 +320,7 @@ const handleLogin = async () => {
 
       <!-- FOOTER TEXT -->
       <p class="text-[11px] text-center text-slate-400 font-medium mt-6">
-        &copy; 2026 SD YWKA Bandung. All rights reserved.
+        &copy; 2026 SD YWKA REL HOMY SCHOOL. All rights reserved.
       </p>
 
     </div>

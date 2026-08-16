@@ -152,7 +152,7 @@
         </div>
 
         <div class="mt-6 pt-4 border-t border-gray-100 text-center">
-          <p class="text-xs text-gray-400">SD YWKA Bandung • Versi 1.0.0</p>
+          <p class="text-xs text-gray-400">SD YWKA REL HOMY SCHOOL • Versi 1.0.0</p>
         </div>
       </div>
     </div>

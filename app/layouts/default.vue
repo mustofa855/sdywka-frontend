@@ -402,9 +402,9 @@ const socialLinks = [
                   href="https://www.tiktok.com/@sdywkabandung?_r=1&_t=ZS-98DMVsngf6z"
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="TikTok SD YWKA Bandung"
+                  aria-label="TikTok SD YWKA REL HOMY SCHOOL"
                   class="w-10 h-10 rounded-xl bg-slate-800 border border-slate-700/80 text-slate-300 flex items-center justify-center transition-all duration-300 hover:bg-black hover:text-white hover:border-slate-600 hover:scale-110 hover:shadow-lg hover:shadow-slate-900/40 group"
-                  title="TikTok SD YWKA Bandung"
+                  title="TikTok SD YWKA REL HOMY SCHOOL"
                 >
                   <svg class="w-5 h-5 fill-current transition-transform duration-300 group-hover:scale-110" viewBox="0 0 24 24">
                     <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.29-2.52.73-5.06 2.66-6.68 1.3-1.1 2.98-1.69 4.69-1.65.17 0 .34.01.51.03v4.07c-.45-.09-.92-.1-1.37-.02-.87.14-1.68.64-2.17 1.38-.61.88-.73 2.05-.33 3.03.38.98 1.28 1.69 2.32 1.83 1.05.15 2.12-.22 2.81-1.03.62-.71.93-1.65.91-2.59.02-4.14.01-8.28.02-12.42z"/>
@@ -416,9 +416,9 @@ const socialLinks = [
                   href="https://youtube.com/@sdywkabandung?si=wC0LLoQbd1swADAH"
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="YouTube SD YWKA Bandung"
+                  aria-label="YouTube SD YWKA REL HOMY SCHOOL"
                   class="w-10 h-10 rounded-xl bg-slate-800 border border-slate-700/80 text-slate-300 flex items-center justify-center transition-all duration-300 hover:bg-red-600 hover:text-white hover:border-transparent hover:scale-110 hover:shadow-lg hover:shadow-red-600/30 group"
-                  title="YouTube SD YWKA Bandung"
+                  title="YouTube SD YWKA REL HOMY SCHOOL"
                 >
                   <svg class="w-5 h-5 fill-current transition-transform duration-300 group-hover:scale-110" viewBox="0 0 24 24">
                     <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>

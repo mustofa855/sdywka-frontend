@@ -21,8 +21,8 @@ const dapatkanUrlGambar = (path) => {
 // ==========================================
 // KONFIGURASI SEO & META DATA (SEARCH ENGINE OPTIMIZATION)
 // ==========================================
-const seoTitle = 'SD YWKA Bandung - Sekolah Dasar Ramah Anak & Berakhlak Mulia'
-const seoDescription = 'Official Website SD YWKA Bandung. Membentuk generasi cerdas, kreatif, dan berakhlak mulia melalui pendidikan berkualitas dan lingkungan belajar yang ramah anak.'
+const seoTitle = 'SD YWKA REL HOMY SCHOOL - Sekolah Dasar Ramah Anak & Berakhlak Mulia'
+const seoDescription = 'Official Website SD YWKA REL HOMY SCHOOL. Membentuk generasi cerdas, kreatif, dan berakhlak mulia melalui pendidikan berkualitas dan lingkungan belajar yang ramah anak.'
 
 // Gambar thumbnail default untuk Open Graph (diambil dari hero slider pertama atau fallback)
 const seoImage = computed(() => {
@@ -61,7 +61,7 @@ useHead({
       children: JSON.stringify({
         '@context': 'https://schema.org',
         '@type': 'EducationalOrganization',
-        'name': 'SD YWKA Bandung',
+        'name': 'SD YWKA REL HOMY SCHOOL',
         'description': seoDescription,
         'url': 'https://sdywkabandung.sch.id',
         'address': {
@@ -317,7 +317,7 @@ const delapanGuru = computed(() => {
                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
               <div v-else class="w-full h-full bg-gradient-to-br from-blue-700 to-slate-900 flex items-center justify-center text-white text-lg font-bold">
-                SD YWKA Bandung
+                SD YWKA REL HOMY SCHOOL
               </div>
               <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent"></div>
               

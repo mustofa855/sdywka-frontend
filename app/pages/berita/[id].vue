@@ -98,14 +98,14 @@ const cetakBerita = () => {
 }
 
 // --- OPTIMASI SEO & META TAGS ---
-const seoTitle = computed(() => berita.value ? `${berita.value.judul} - SD YWKA Bandung` : 'Detail Berita - SD YWKA Bandung')
+const seoTitle = computed(() => berita.value ? `${berita.value.judul} - SD YWKA REL HOMY SCHOOL` : 'Detail Berita - SD YWKA REL HOMY SCHOOL')
 const seoDescription = computed(() => {
-  if (!berita.value) return 'Baca berita dan informasi terbaru dari SD YWKA Bandung.'
+  if (!berita.value) return 'Baca berita dan informasi terbaru dari SD YWKA REL HOMY SCHOOL.'
   if (berita.value.ringkasan) return berita.value.ringkasan
-  return berita.value.isi ? berita.value.isi.substring(0, 160).replace(/\n/g, ' ') : 'Berita terkini SD YWKA Bandung.'
+  return berita.value.isi ? berita.value.isi.substring(0, 160).replace(/\n/g, ' ') : 'Berita terkini SD YWKA REL HOMY SCHOOL.'
 })
 const seoImage = computed(() => berita.value?.gambar ? dapatkanUrlGambar(berita.value.gambar) : `${url.origin}/default-og-image.jpg`)
-const seoAuthor = computed(() => berita.value?.penulis_nama || 'Humas SD YWKA Bandung')
+const seoAuthor = computed(() => berita.value?.penulis_nama || 'Humas SD YWKA REL HOMY SCHOOL')
 const seoPublishedTime = computed(() => formatTanggalISO(berita.value?.tanggal_upload))
 
 useSeoMeta({
@@ -116,7 +116,7 @@ useSeoMeta({
   ogImage: seoImage,
   ogUrl: url.href,
   ogType: 'article',
-  ogSiteName: 'SD YWKA Bandung',
+  ogSiteName: 'SD YWKA REL HOMY SCHOOL',
   articlePublishedTime: seoPublishedTime,
   articleAuthor: seoAuthor,
   articleSection: computed(() => berita.value?.kategori || 'Berita'),
@@ -146,7 +146,7 @@ useHead({
         }],
         'publisher': {
           '@type': 'Organization',
-          'name': 'SD YWKA Bandung',
+          'name': 'SD YWKA REL HOMY SCHOOL',
           'logo': {
             '@type': 'ImageObject',
             'url': `${url.origin}/favicon.ico`
