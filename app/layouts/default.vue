@@ -4,6 +4,16 @@ import { ref, computed, onMounted, onUnmounted } from 'vue'
 const isMobileMenuOpen = ref(false)
 const isLoginModalOpen = ref(false)
 const showScrollTop = ref(false)
+const isPageLoading = ref(false)
+
+// Deteksi Navigasi Halaman untuk Memunculkan Loading & Anti Spam Klik
+const nuxtApp = useNuxtApp()
+nuxtApp.hook('page:start', () => {
+  isPageLoading.value = true
+})
+nuxtApp.hook('page:finish', () => {
+  isPageLoading.value = false
+})
 
 const authToken = useCookie('auth_token')
 const authUser = useCookie('auth_user')
@@ -99,6 +109,25 @@ const socialLinks = [
 <template>
   <div class="min-h-screen bg-slate-50 flex flex-col font-sans text-slate-800 relative">
     
+    <!-- TOP PROGRESS BAR LOADING (JARINGAN LEMOT) -->
+    <div v-if="isPageLoading" class="fixed top-0 left-0 right-0 z-[1000] h-1 bg-gradient-to-r from-amber-400 via-blue-600 to-emerald-500 animate-pulse">
+      <div class="h-full bg-white/40 w-1/3 animate-loading-bar"></div>
+    </div>
+
+    <!-- NOTIFIKASI FLOATING BADGE (INDIKATOR PROSES SAAT SPAM KLIK / JARINGAN LAMBAT) -->
+    <transition name="fade">
+      <div v-if="isPageLoading" class="fixed top-5 right-5 z-[999] bg-slate-900/90 backdrop-blur-md text-white px-4 py-2.5 rounded-2xl shadow-2xl border border-slate-700/80 flex items-center gap-3 text-xs font-semibold">
+        <svg class="animate-spin h-4 w-4 text-amber-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <span>Memuat halaman...</span>
+      </div>
+    </transition>
+
+    <!-- ANTI SPAM CLICK GUARD (MENCEGAH DOUBLE CLICK KETIKA MEMUAT) -->
+    <div v-if="isPageLoading" class="fixed inset-0 z-[998] cursor-wait bg-slate-900/5"></div>
+
     <!-- TOP BAR SOSIAL MEDIA & KONTAK (DESKTOP) -->
     <div class="bg-slate-900 text-slate-300 text-xs py-2 px-4 border-b border-slate-800 hidden md:block">
       <div class="max-w-7xl mx-auto flex justify-between items-center">
@@ -137,26 +166,26 @@ const socialLinks = [
 
         <!-- KIRI: Logo YWKA -->
         <div class="flex-shrink-0 flex items-center">
-          <NuxtLink to="/" class="text-2xl font-extrabold text-blue-800 tracking-tight flex items-center gap-2">
+          <NuxtLink to="/" class="text-2xl font-extrabold text-blue-800 tracking-tight flex items-center gap-2 active:scale-95 transition-transform">
             <img src="/logo-ywka.png" alt="Logo YWKA" class="h-8 md:h-10 w-auto" />
           </NuxtLink>
         </div>
 
         <!-- TENGAH: Menu Navigasi Desktop -->
         <nav class="hidden md:flex space-x-6 lg:space-x-8 text-xs lg:text-sm font-semibold text-slate-600">
-          <NuxtLink to="/" class="hover:text-slate-900 py-5 transition-colors"
+          <NuxtLink to="/" class="hover:text-slate-900 py-5 transition-colors active:opacity-70"
             exact-active-class="text-slate-900 font-bold border-b-2 border-amber-400">Beranda</NuxtLink>
-          <NuxtLink to="/profil" class="hover:text-slate-900 py-5 transition-colors"
+          <NuxtLink to="/profil" class="hover:text-slate-900 py-5 transition-colors active:opacity-70"
             exact-active-class="text-slate-900 font-bold border-b-2 border-amber-400">Profil</NuxtLink>
-          <NuxtLink to="/guru" class="hover:text-slate-900 py-5 transition-colors"
+          <NuxtLink to="/guru" class="hover:text-slate-900 py-5 transition-colors active:opacity-70"
             exact-active-class="text-slate-900 font-bold border-b-2 border-amber-400">Data Guru</NuxtLink>
-          <NuxtLink to="/berita" class="hover:text-slate-900 py-5 transition-colors"
+          <NuxtLink to="/berita" class="hover:text-slate-900 py-5 transition-colors active:opacity-70"
             exact-active-class="text-slate-900 font-bold border-b-2 border-amber-400">Berita</NuxtLink>
-          <NuxtLink to="/pengumuman" class="hover:text-slate-900 py-5 transition-colors"
+          <NuxtLink to="/pengumuman" class="hover:text-slate-900 py-5 transition-colors active:opacity-70"
             exact-active-class="text-slate-900 font-bold border-b-2 border-amber-400">Pengumuman</NuxtLink>
-          <NuxtLink to="/agenda" class="hover:text-slate-900 py-5 transition-colors"
+          <NuxtLink to="/agenda" class="hover:text-slate-900 py-5 transition-colors active:opacity-70"
             exact-active-class="text-slate-900 font-bold border-b-2 border-amber-400">Agenda & Event</NuxtLink>
-          <NuxtLink to="/galeri" class="hover:text-slate-900 py-5 transition-colors"
+          <NuxtLink to="/galeri" class="hover:text-slate-900 py-5 transition-colors active:opacity-70"
             exact-active-class="text-slate-900 font-bold border-b-2 border-amber-400">Galeri</NuxtLink>
         </nav>
 
@@ -167,7 +196,7 @@ const socialLinks = [
             <template v-if="!isLoggedIn">
               <button
                 @click="openLoginModal"
-                class="inline-flex items-center bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-sm hover:shadow gap-2 focus:outline-none"
+                class="inline-flex items-center bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-sm hover:shadow gap-2 focus:outline-none active:scale-95"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-amber-400" viewBox="0 0 24 24">
                   <path d="M0 0h24v24H0z" fill="none" />
@@ -180,7 +209,7 @@ const socialLinks = [
 
             <!-- Jika Pengguna Sudah Login -->
             <NuxtLink v-else :to="userPortalPath"
-              class="inline-flex items-center bg-blue-900 hover:bg-blue-800 text-white px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-sm hover:shadow">
+              class="inline-flex items-center bg-blue-900 hover:bg-blue-800 text-white px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-sm hover:shadow active:scale-95">
               <svg class="w-4 h-4 mr-1.5 text-amber-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>
@@ -190,7 +219,7 @@ const socialLinks = [
 
           <!-- Tombol Hamburger Mobile -->
           <button @click="isMobileMenuOpen = !isMobileMenuOpen"
-            class="md:hidden text-slate-700 hover:text-slate-900 p-2 focus:outline-none" aria-label="Toggle Menu">
+            class="md:hidden text-slate-700 hover:text-slate-900 p-2 focus:outline-none active:scale-95 transition-transform" aria-label="Toggle Menu">
             <svg v-if="!isMobileMenuOpen" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none"
               viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -209,25 +238,25 @@ const socialLinks = [
         <div v-if="isMobileMenuOpen"
           class="md:hidden bg-white border-b border-slate-200 px-4 pt-2 pb-6 space-y-2 shadow-lg">
           <NuxtLink to="/" @click="closeMobileMenu"
-            class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900"
+            class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900 active:bg-slate-200 transition-colors"
             exact-active-class="bg-slate-900 text-white font-bold">Beranda</NuxtLink>
           <NuxtLink to="/profil" @click="closeMobileMenu"
-            class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900"
+            class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900 active:bg-slate-200 transition-colors"
             exact-active-class="bg-slate-900 text-white font-bold">Profil</NuxtLink>
           <NuxtLink to="/guru" @click="closeMobileMenu"
-            class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900"
+            class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900 active:bg-slate-200 transition-colors"
             exact-active-class="bg-slate-900 text-white font-bold">Data Guru</NuxtLink>
           <NuxtLink to="/berita" @click="closeMobileMenu"
-            class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900"
+            class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900 active:bg-slate-200 transition-colors"
             exact-active-class="bg-slate-900 text-white font-bold">Berita</NuxtLink>
           <NuxtLink to="/pengumuman" @click="closeMobileMenu"
-            class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900"
+            class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900 active:bg-slate-200 transition-colors"
             exact-active-class="bg-slate-900 text-white font-bold">Pengumuman</NuxtLink>
           <NuxtLink to="/agenda" @click="closeMobileMenu"
-            class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900"
+            class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900 active:bg-slate-200 transition-colors"
             exact-active-class="bg-slate-900 text-white font-bold">Agenda & Event</NuxtLink>
           <NuxtLink to="/galeri" @click="closeMobileMenu"
-            class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900"
+            class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900 active:bg-slate-200 transition-colors"
             exact-active-class="bg-slate-900 text-white font-bold">Galeri</NuxtLink>
 
           <!-- Tombol Trigger Modal di Mobile -->
@@ -235,7 +264,7 @@ const socialLinks = [
             <template v-if="!isLoggedIn">
               <button
                 @click="openLoginModal"
-                class="w-full flex items-center justify-center bg-slate-900 hover:bg-slate-800 text-white px-4 py-2.5 rounded-xl text-xs font-bold shadow-sm transition-all gap-2"
+                class="w-full flex items-center justify-center bg-slate-900 hover:bg-slate-800 text-white px-4 py-2.5 rounded-xl text-xs font-bold shadow-sm transition-all gap-2 active:scale-95"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-amber-400" viewBox="0 0 24 24">
                   <path d="M0 0h24v24H0z" fill="none" />
@@ -247,7 +276,7 @@ const socialLinks = [
             </template>
 
             <NuxtLink v-else :to="userPortalPath" @click="closeMobileMenu"
-              class="w-full flex items-center justify-center bg-blue-900 hover:bg-blue-800 text-white px-4 py-2.5 rounded-xl text-xs font-bold shadow-sm transition-all">
+              class="w-full flex items-center justify-center bg-blue-900 hover:bg-blue-800 text-white px-4 py-2.5 rounded-xl text-xs font-bold shadow-sm transition-all active:scale-95">
               <svg class="w-4 h-4 mr-2 text-amber-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>
@@ -302,7 +331,7 @@ const socialLinks = [
               <NuxtLink
                 to="/login"
                 @click="closeLoginModal"
-                class="flex items-center gap-4 p-4 rounded-2xl border-2 border-slate-100 hover:border-blue-600 hover:bg-blue-50/50 transition-all group"
+                class="flex items-center gap-4 p-4 rounded-2xl border-2 border-slate-100 hover:border-blue-600 hover:bg-blue-50/50 transition-all group active:scale-[0.98]"
               >
                 <div class="w-11 h-11 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center shrink-0 group-hover:bg-blue-600 group-hover:text-white transition-colors">
                   <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -324,7 +353,7 @@ const socialLinks = [
                 target="_blank"
                 rel="noopener noreferrer"
                 @click="closeLoginModal"
-                class="flex items-center gap-4 p-4 rounded-2xl border-2 border-slate-100 hover:border-emerald-600 hover:bg-emerald-50/50 transition-all group"
+                class="flex items-center gap-4 p-4 rounded-2xl border-2 border-slate-100 hover:border-emerald-600 hover:bg-emerald-50/50 transition-all group active:scale-[0.98]"
               >
                 <div class="w-11 h-11 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
                   <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -363,7 +392,7 @@ const socialLinks = [
           <div class="space-y-4">
             <div class="flex items-center gap-2">
               <div class="flex-shrink-0 flex items-center">
-                <NuxtLink to="/" class="text-2xl font-extrabold text-blue-800 tracking-tight flex items-center">
+                <NuxtLink to="/" class="text-2xl font-extrabold text-blue-800 tracking-tight flex items-center active:scale-95 transition-transform">
                   <img src="/logo-ywka.png" alt="Logo YWKA" class="h-8 md:h-10 w-auto" />
                 </NuxtLink>
               </div>
@@ -389,7 +418,7 @@ const socialLinks = [
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Instagram SD YWKA Official"
-                  class="w-10 h-10 rounded-xl bg-slate-800 border border-slate-700/80 text-slate-300 flex items-center justify-center transition-all duration-300 hover:bg-gradient-to-tr hover:from-amber-500 hover:via-rose-500 hover:to-purple-600 hover:text-white hover:border-transparent hover:scale-110 hover:shadow-lg hover:shadow-rose-500/20 group"
+                  class="w-10 h-10 rounded-xl bg-slate-800 border border-slate-700/80 text-slate-300 flex items-center justify-center transition-all duration-300 hover:bg-gradient-to-tr hover:from-amber-500 hover:via-rose-500 hover:to-purple-600 hover:text-white hover:border-transparent hover:scale-110 hover:shadow-lg hover:shadow-rose-500/20 active:scale-95 group"
                   title="Instagram SD YWKA Official"
                 >
                   <svg class="w-5 h-5 fill-current transition-transform duration-300 group-hover:scale-110" viewBox="0 0 24 24">
@@ -403,7 +432,7 @@ const socialLinks = [
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="TikTok SD YWKA REL HOMY SCHOOL"
-                  class="w-10 h-10 rounded-xl bg-slate-800 border border-slate-700/80 text-slate-300 flex items-center justify-center transition-all duration-300 hover:bg-black hover:text-white hover:border-slate-600 hover:scale-110 hover:shadow-lg hover:shadow-slate-900/40 group"
+                  class="w-10 h-10 rounded-xl bg-slate-800 border border-slate-700/80 text-slate-300 flex items-center justify-center transition-all duration-300 hover:bg-black hover:text-white hover:border-slate-600 hover:scale-110 hover:shadow-lg hover:shadow-slate-900/40 active:scale-95 group"
                   title="TikTok SD YWKA REL HOMY SCHOOL"
                 >
                   <svg class="w-5 h-5 fill-current transition-transform duration-300 group-hover:scale-110" viewBox="0 0 24 24">
@@ -417,7 +446,7 @@ const socialLinks = [
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="YouTube SD YWKA REL HOMY SCHOOL"
-                  class="w-10 h-10 rounded-xl bg-slate-800 border border-slate-700/80 text-slate-300 flex items-center justify-center transition-all duration-300 hover:bg-red-600 hover:text-white hover:border-transparent hover:scale-110 hover:shadow-lg hover:shadow-red-600/30 group"
+                  class="w-10 h-10 rounded-xl bg-slate-800 border border-slate-700/80 text-slate-300 flex items-center justify-center transition-all duration-300 hover:bg-red-600 hover:text-white hover:border-transparent hover:scale-110 hover:shadow-lg hover:shadow-red-600/30 active:scale-95 group"
                   title="YouTube SD YWKA REL HOMY SCHOOL"
                 >
                   <svg class="w-5 h-5 fill-current transition-transform duration-300 group-hover:scale-110" viewBox="0 0 24 24">
@@ -431,7 +460,7 @@ const socialLinks = [
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="WhatsApp Official SD YWKA"
-                  class="w-10 h-10 rounded-xl bg-slate-800 border border-slate-700/80 text-slate-300 flex items-center justify-center transition-all duration-300 hover:bg-emerald-600 hover:text-white hover:border-transparent hover:scale-110 hover:shadow-lg hover:shadow-emerald-600/30 group"
+                  class="w-10 h-10 rounded-xl bg-slate-800 border border-slate-700/80 text-slate-300 flex items-center justify-center transition-all duration-300 hover:bg-emerald-600 hover:text-white hover:border-transparent hover:scale-110 hover:shadow-lg hover:shadow-emerald-600/30 active:scale-95 group"
                   title="WhatsApp Official SD YWKA"
                 >
                   <svg class="w-5 h-5 fill-current transition-transform duration-300 group-hover:scale-110" viewBox="0 0 24 24">
@@ -447,19 +476,19 @@ const socialLinks = [
             <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-4 border-b border-slate-800 pb-2">Tautan Cepat</h4>
             <ul class="space-y-2 text-xs font-medium">
               <li>
-                <NuxtLink to="/profil" class="hover:text-amber-400 transition-colors">Profil Sekolah</NuxtLink>
+                <NuxtLink to="/profil" class="hover:text-amber-400 transition-colors active:opacity-70">Profil Sekolah</NuxtLink>
               </li>
               <li>
-                <NuxtLink to="/guru" class="hover:text-amber-400 transition-colors">Tenaga Pendidik</NuxtLink>
+                <NuxtLink to="/guru" class="hover:text-amber-400 transition-colors active:opacity-70">Tenaga Pendidik</NuxtLink>
               </li>
               <li>
-                <NuxtLink to="/berita" class="hover:text-amber-400 transition-colors">Berita & Informasi</NuxtLink>
+                <NuxtLink to="/berita" class="hover:text-amber-400 transition-colors active:opacity-70">Berita & Informasi</NuxtLink>
               </li>
               <li>
-                <NuxtLink to="/agenda" class="hover:text-amber-400 transition-colors">Agenda & Kegiatan</NuxtLink>
+                <NuxtLink to="/agenda" class="hover:text-amber-400 transition-colors active:opacity-70">Agenda & Kegiatan</NuxtLink>
               </li>
               <li>
-                <NuxtLink to="/galeri" class="hover:text-amber-400 transition-colors">Galeri Dokumentasi</NuxtLink>
+                <NuxtLink to="/galeri" class="hover:text-amber-400 transition-colors active:opacity-70">Galeri Dokumentasi</NuxtLink>
               </li>
             </ul>
           </div>
@@ -571,7 +600,21 @@ const socialLinks = [
 </template>
 
 <style scoped>
-/* Animasi Fade In / Out untuk Tombol Floating Back to Top */
+/* Keyframe Top Loading Bar */
+@keyframes loadingBar {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(300%);
+  }
+}
+
+.animate-loading-bar {
+  animation: loadingBar 1.5s infinite linear;
+}
+
+/* Animasi Fade In / Out untuk Tombol Floating Back to Top & Loading Badge */
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.3s ease, transform 0.3s ease;
