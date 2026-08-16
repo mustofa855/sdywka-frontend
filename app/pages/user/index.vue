@@ -137,7 +137,7 @@
                   <button 
                     v-if="post.user_username === user.username"
                     @click="confirmDeletePost(post)" 
-                    class="w-full text-left px-3 py-2 text-xs font-semibold text-rose-600 hover:bg-rose-50 flex items-center gap-2"
+                    class="w-full text-left px-3 py-2 text-xs font-semibold text-rose-600 hover:bg-rose-50 flex items-center gap-2 cursor-pointer"
                   >
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
@@ -310,6 +310,65 @@
       </div>
     </div>
 
+    <!-- ========================================== -->
+    <!-- MODAL 3: KONFIRMASI HAPUS POSTINGAN       -->
+    <!-- ========================================== -->
+    <div 
+      v-if="isDeletePostModalOpen" 
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4"
+      @click.self="!isDeletingPost && cancelDeletePost()"
+    >
+      <div class="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl space-y-4 text-center animate-fade-in relative">
+        <!-- Tombol Tutup (X) -->
+        <button 
+          @click="cancelDeletePost" 
+          :disabled="isDeletingPost"
+          class="absolute right-4 top-4 text-slate-400 hover:text-slate-600 disabled:opacity-40"
+        >
+          ✕
+        </button>
+
+        <!-- Icon Tempat Sampah -->
+        <div class="w-12 h-12 bg-rose-100 text-rose-600 rounded-2xl flex items-center justify-center mx-auto">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+          </svg>
+        </div>
+
+        <div>
+          <h3 class="text-base font-bold text-slate-800">Hapus Postingan?</h3>
+          <p class="text-xs text-slate-500 mt-1 leading-relaxed">
+            Apakah Anda yakin ingin menghapus postingan ini? Tindakan ini tidak dapat dibatalkan.
+          </p>
+        </div>
+
+        <!-- Pesan Error (jika gagal) -->
+        <p v-if="deletePostError" class="text-xs text-rose-500 font-semibold">{{ deletePostError }}</p>
+
+        <!-- Tombol Aksi Batal & Hapus -->
+        <div class="flex gap-2 pt-2">
+          <button 
+            @click="cancelDeletePost" 
+            :disabled="isDeletingPost"
+            class="flex-1 py-2.5 text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition disabled:opacity-50 cursor-pointer"
+          >
+            Batal
+          </button>
+          <button 
+            @click="executeDeletePost" 
+            :disabled="isDeletingPost"
+            class="flex-1 py-2.5 text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 active:scale-95 rounded-xl transition shadow-md disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer"
+          >
+            <svg v-if="isDeletingPost" class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span>{{ isDeletingPost ? 'Menghapus...' : 'Ya, Hapus' }}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -342,6 +401,12 @@ const selectedNote = ref(null)
 
 const feed = ref([])
 const activePostMenuId = ref(null)
+
+// STATE MODAL HAPUS POSTINGAN & ANTI-SPAM LOADING
+const isDeletePostModalOpen = ref(false)
+const postToDelete = ref(null)
+const isDeletingPost = ref(false)
+const deletePostError = ref('')
 
 const formatDate = (dateString) => {
   if (!dateString) return 'Baru saja'
@@ -482,18 +547,45 @@ const toggleLikePost = async (post) => {
   }
 }
 
-const confirmDeletePost = async (post) => {
-  if (!confirm('Apakah Anda yakin ingin menghapus postingan ini?')) return
+// MEMBUKA MODAL KONFIRMASI HAPUS POSTINGAN (MENGGANTIKAN ALERT)
+const confirmDeletePost = (post) => {
+  postToDelete.value = post
+  deletePostError.value = ''
+  isDeletePostModalOpen.value = true
+  activePostMenuId.value = null // Tutup dropdown menu option
+}
+
+// BATAL HAPUS POST
+const cancelDeletePost = () => {
+  if (isDeletingPost.value) return // Cegah tutup modal saat proses hapus berjalan
+  isDeletePostModalOpen.value = false
+  postToDelete.value = null
+  deletePostError.value = ''
+}
+
+// EKSEKUSI HAPUS POST KE SERVER DENGAN LOADING & ANTI-SPAM
+const executeDeletePost = async () => {
+  if (!postToDelete.value || isDeletingPost.value) return
+  
+  isDeletingPost.value = true
+  deletePostError.value = ''
 
   try {
-    await $fetch(`${API_BASE}/api/user-api/posts/${post.id}/`, {
+    await $fetch(`${API_BASE}/api/user-api/posts/${postToDelete.value.id}/`, {
       method: 'DELETE',
       headers: { Authorization: `Bearer ${authToken.value}` }
     })
 
-    feed.value = feed.value.filter(p => p.id !== post.id)
+    // Filter postingan yang telah dihapus dari feed
+    feed.value = feed.value.filter(p => p.id !== postToDelete.value.id)
+    
+    // Tutup Modal
+    isDeletePostModalOpen.value = false
+    postToDelete.value = null
   } catch (err) {
-    alert('Gagal menghapus postingan.')
+    deletePostError.value = err.data?.message || 'Gagal menghapus postingan. Silakan coba lagi.'
+  } finally {
+    isDeletingPost.value = false
   }
 }
 

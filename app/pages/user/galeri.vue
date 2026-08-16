@@ -98,7 +98,7 @@
                 class="absolute right-0 top-8 bg-white border border-slate-100 shadow-xl rounded-xl py-1.5 w-36 z-30 animate-fade-in"
               >
                 <button 
-                  @click="deletePostFromGallery(selectedPost)" 
+                  @click="confirmDeletePost(selectedPost)" 
                   class="w-full text-left px-3 py-2 text-xs font-semibold text-rose-600 hover:bg-rose-50 flex items-center gap-2 cursor-pointer"
                 >
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -182,6 +182,63 @@
       </div>
     </div>
 
+    <!-- MODAL KONFIRMASI HAPUS POSTINGAN (DENGAN LOADING & ANTI-SPAM) -->
+    <div 
+      v-if="isDeleteModalOpen" 
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 animate-fade-in"
+      @click.self="!isDeletingPost && cancelDeletePost()"
+    >
+      <div class="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl space-y-4 text-center relative animate-fade-in">
+        <!-- Tombol Tutup (X) -->
+        <button 
+          @click="cancelDeletePost" 
+          :disabled="isDeletingPost"
+          class="absolute right-4 top-4 text-slate-400 hover:text-slate-600 disabled:opacity-40"
+        >
+          ✕
+        </button>
+
+        <!-- Icon Tempat Sampah -->
+        <div class="w-12 h-12 bg-rose-100 text-rose-600 rounded-2xl flex items-center justify-center mx-auto">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+          </svg>
+        </div>
+
+        <div>
+          <h3 class="text-base font-bold text-slate-800">Hapus Postingan?</h3>
+          <p class="text-xs text-slate-500 mt-1 leading-relaxed">
+            Apakah Anda yakin ingin menghapus postingan ini? Tindakan ini tidak dapat dibatalkan.
+          </p>
+        </div>
+
+        <!-- Pesan Error (jika gagal) -->
+        <p v-if="deletePostError" class="text-xs text-rose-500 font-semibold">{{ deletePostError }}</p>
+
+        <!-- Tombol Aksi Batal & Hapus -->
+        <div class="flex gap-2 pt-2">
+          <button 
+            @click="cancelDeletePost" 
+            :disabled="isDeletingPost"
+            class="flex-1 py-2.5 text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition disabled:opacity-50 cursor-pointer"
+          >
+            Batal
+          </button>
+          <button 
+            @click="executeDeletePost" 
+            :disabled="isDeletingPost"
+            class="flex-1 py-2.5 text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 active:scale-95 rounded-xl transition shadow-md disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer"
+          >
+            <svg v-if="isDeletingPost" class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span>{{ isDeletingPost ? 'Menghapus...' : 'Ya, Hapus' }}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -208,6 +265,12 @@ const selectedPost = ref(null)
 const isOptionMenuOpen = ref(false)
 const newCommentText = ref('')
 const isSubmittingComment = ref(false)
+
+// STATE MODAL HAPUS POSTINGAN & LOADING
+const isDeleteModalOpen = ref(false)
+const postToDelete = ref(null)
+const isDeletingPost = ref(false)
+const deletePostError = ref('')
 
 const totalLikes = computed(() => {
   return userPosts.value.reduce((acc, curr) => acc + (curr.likes_count || 0), 0)
@@ -255,20 +318,43 @@ const openPostDetail = (post) => {
   isOptionMenuOpen.value = false
 }
 
-// HAPUS POST DARI GALERI
-const deletePostFromGallery = async (post) => {
-  if (!confirm('Apakah Anda yakin ingin menghapus postingan ini?')) return
+// BUKA MODAL KONFIRMASI HAPUS
+const confirmDeletePost = (post) => {
+  postToDelete.value = post
+  deletePostError.value = ''
+  isDeleteModalOpen.value = true
+  isOptionMenuOpen.value = false
+}
+
+// BATAL HAPUS POST
+const cancelDeletePost = () => {
+  if (isDeletingPost.value) return
+  isDeleteModalOpen.value = false
+  postToDelete.value = null
+  deletePostError.value = ''
+}
+
+// EKSEKUSI HAPUS POST KE SERVER DENGAN LOADING & ANTI-SPAM
+const executeDeletePost = async () => {
+  if (!postToDelete.value || isDeletingPost.value) return
+
+  isDeletingPost.value = true
+  deletePostError.value = ''
 
   try {
-    await $fetch(`${API_BASE}/api/user-api/posts/${post.id}/`, {
+    await $fetch(`${API_BASE}/api/user-api/posts/${postToDelete.value.id}/`, {
       method: 'DELETE',
       headers: { Authorization: `Bearer ${authToken.value}` }
     })
 
-    userPosts.value = userPosts.value.filter(p => p.id !== post.id)
+    userPosts.value = userPosts.value.filter(p => p.id !== postToDelete.value.id)
     selectedPost.value = null
+    isDeleteModalOpen.value = false
+    postToDelete.value = null
   } catch (err) {
-    alert('Gagal menghapus postingan.')
+    deletePostError.value = err.data?.message || 'Gagal menghapus postingan. Silakan coba lagi.'
+  } finally {
+    isDeletingPost.value = false
   }
 }
 
@@ -288,7 +374,7 @@ const toggleLikePost = async (post) => {
       target.likes_count = res.likes_count
     }
   } catch (err) {
-    alert('Gagal menyukai postingan.')
+    console.error('Gagal menyukai postingan:', err)
   }
 }
 
@@ -316,7 +402,7 @@ const submitComment = async () => {
 
     newCommentText.value = ''
   } catch (err) {
-    alert('Gagal menambahkan komentar.')
+    console.error('Gagal menambahkan komentar:', err)
   } finally {
     isSubmittingComment.value = false
   }
