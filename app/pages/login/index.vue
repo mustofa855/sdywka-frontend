@@ -52,10 +52,10 @@ const navigateToRole = (role) => {
 
   if (targetRole === 'admin') {
     router.push('/admin/')
-  } else if (targetRole === 'staf' || targetRole === 'guru') {
+  } else if (targetRole === 'staf' || targetRole === 'guru' || targetRole === 'user') {
     router.push('/user/')
   } else {
-    router.push('/')
+    router.push('/user/')
   }
 }
 

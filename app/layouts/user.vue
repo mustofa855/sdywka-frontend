@@ -21,9 +21,9 @@
         <NuxtLink 
           to="/user" 
           class="flex flex-col items-center gap-1 py-1 px-3 rounded-xl transition-all duration-200"
-          :class="route.path === '/user' ? 'text-blue-700 font-bold bg-blue-50 shadow-sm' : 'text-slate-400 hover:text-slate-600'"
+          :class="isHomeActive ? 'text-blue-700 font-bold bg-blue-50 shadow-sm' : 'text-slate-400 hover:text-slate-600'"
         >
-          <svg class="w-6 h-6" :class="route.path === '/user' ? 'stroke-[2.5]' : 'stroke-2'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-6 h-6" :class="isHomeActive ? 'stroke-[2.5]' : 'stroke-2'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
           </svg>
           <span class="text-[10px]">Beranda</span>
@@ -33,9 +33,9 @@
         <NuxtLink 
           to="/user/gurustaf" 
           class="flex flex-col items-center gap-1 py-1 px-3 rounded-xl transition-all duration-200"
-          :class="route.path.startsWith('/user/gurustaf') ? 'text-blue-700 font-bold bg-blue-50 shadow-sm' : 'text-slate-400 hover:text-slate-600'"
+          :class="isGuruActive ? 'text-blue-700 font-bold bg-blue-50 shadow-sm' : 'text-slate-400 hover:text-slate-600'"
         >
-          <svg class="w-6 h-6" :class="route.path.startsWith('/user/gurustaf') ? 'stroke-[2.5]' : 'stroke-2'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-6 h-6" :class="isGuruActive ? 'stroke-[2.5]' : 'stroke-2'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
           </svg>
           <span class="text-[10px]">Guru</span>
@@ -56,9 +56,9 @@
         <NuxtLink 
           to="/user/galeri" 
           class="flex flex-col items-center gap-1 py-1 px-3 rounded-xl transition-all duration-200"
-          :class="route.path.startsWith('/user/galeri') ? 'text-blue-700 font-bold bg-blue-50 shadow-sm' : 'text-slate-400 hover:text-slate-600'"
+          :class="isGaleriActive ? 'text-blue-700 font-bold bg-blue-50 shadow-sm' : 'text-slate-400 hover:text-slate-600'"
         >
-          <svg class="w-6 h-6" :class="route.path.startsWith('/user/galeri') ? 'stroke-[2.5]' : 'stroke-2'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-6 h-6" :class="isGaleriActive ? 'stroke-[2.5]' : 'stroke-2'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
           </svg>
           <span class="text-[10px]">Galeri</span>
@@ -68,9 +68,9 @@
         <NuxtLink 
           to="/user/profil" 
           class="flex flex-col items-center gap-1 py-1 px-3 rounded-xl transition-all duration-200"
-          :class="route.path.startsWith('/user/profil') ? 'text-blue-700 font-bold bg-blue-50 shadow-sm' : 'text-slate-400 hover:text-slate-600'"
+          :class="isProfilActive ? 'text-blue-700 font-bold bg-blue-50 shadow-sm' : 'text-slate-400 hover:text-slate-600'"
         >
-          <svg class="w-6 h-6" :class="route.path.startsWith('/user/profil') ? 'stroke-[2.5]' : 'stroke-2'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-6 h-6" :class="isProfilActive ? 'stroke-[2.5]' : 'stroke-2'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
           </svg>
           <span class="text-[10px]">Profil</span>
@@ -156,7 +156,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 
 // Pencegahan SEO: Blokir indexing pada seluruh halaman privat/user portal
@@ -170,6 +170,15 @@ const route = useRoute()
 const config = useRuntimeConfig()
 const API_BASE = config.public.apiBase
 const authToken = useCookie('auth_token')
+
+// NORMALISASI PATH: Menghapus trailing slash (misal /user/ menjadi /user)
+const normalizedPath = computed(() => route.path.replace(/\/$/, '') || '/')
+
+// Pengecekan status aktif menu secara fleksibel & presisi
+const isHomeActive = computed(() => normalizedPath.value === '/user')
+const isGuruActive = computed(() => normalizedPath.value.startsWith('/user/gurustaf'))
+const isGaleriActive = computed(() => normalizedPath.value.startsWith('/user/galeri'))
+const isProfilActive = computed(() => normalizedPath.value.startsWith('/user/profil'))
 
 const postFileInputRef = ref(null)
 const selectedFile = ref(null)
@@ -265,7 +274,7 @@ const submitPost = async () => {
     cancelPostModal()
     
     // PERBAIKAN NAVIGASI: Arahkan ke Beranda (/user) dan perbarui halaman
-    if (route.path === '/user') {
+    if (normalizedPath.value === '/user') {
       window.location.reload()
     } else {
       await navigateTo('/user')
