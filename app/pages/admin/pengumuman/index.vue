@@ -238,11 +238,14 @@
 
             <!-- File Lampiran PDF -->
             <div>
-              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">File Lampiran PDF / Dokumen (Opsional)</label>
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                File Lampiran PDF / Gambar (Opsional)
+              </label>
+              <p class="text-[11px] text-slate-500 mb-2">Hanya mendukung PDF, JPG, JPEG, PNG. Maksimal ukuran file: 10 MB</p>
               <input 
                 type="file" 
                 @change="handleFileUpload" 
-                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.webp"
+                accept=".pdf,.jpg,.jpeg,.png"
                 class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
               />
               <p v-if="existingFileUrl && !selectedFile" class="text-xs text-emerald-600 mt-2 font-medium">
@@ -820,6 +823,41 @@ const handleFileUpload = (event) => {
   const file = event.target.files[0]
 
   if (file) {
+    // 1. Validasi Ekstensi/Tipe File (Hanya dukung PDF, JPG, JPEG, PNG)
+    const allowedExtensions = ['pdf', 'jpg', 'jpeg', 'png']
+    const fileExtension = file.name.split('.').pop().toLowerCase()
+
+    if (!allowedExtensions.includes(fileExtension)) {
+      showAlert(
+        'Format File Tidak Didukung',
+        'Maaf, tidak bisa mengunggah format file ini. Sistem hanya mengizinkan file PDF, JPG, JPEG, atau PNG.',
+        'danger'
+      )
+      
+      // Reset input jika format tidak sesuai
+      event.target.value = ''
+      selectedFile.value = null
+      return 
+    }
+
+    // 2. Validasi Ukuran File (Maksimal 10 MB = 10 * 1024 * 1024 bytes)
+    const maxSize = 10 * 1024 * 1024;
+    
+    if (file.size > maxSize) {
+      // Tampilkan popup/modal peringatan menggunakan komponen bawaan
+      showAlert(
+        'Ukuran File Terlalu Besar',
+        'Maaf, ukuran file tidak boleh lebih dari 10 MB. Silakan pilih file dengan ukuran yang lebih kecil.',
+        'danger'
+      );
+      
+      // Reset input agar file yang terlalu besar tidak tersimpan
+      event.target.value = '';
+      selectedFile.value = null;
+      return; // Hentikan proses
+    }
+
+    // Jika lulus semua validasi ukuran dan format, simpan ke state
     selectedFile.value = file
   }
 }
